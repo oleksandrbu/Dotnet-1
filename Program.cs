@@ -6,24 +6,28 @@ namespace Dotnet_1
     {
         static void Main(string[] args)
         {
-            DateTime start, end;
+            DateTime start = new DateTime(2020, 8, 3), end = new DateTime(2020, 8, 15);
             DateTime[] holidays = {new DateTime(2020, 8, 24), new DateTime(2020, 8, 5)};
-
-            start = new DateTime(2020, 6, 1);
-            end = new DateTime(2020, 8, 30);
 
             CountWorkingDays(start, end, holidays);
         }
         public static void CountWorkingDays(DateTime start, DateTime end, DateTime[] holidays)
         {
-            TimeSpan dif = end.Subtract(start);
-            double count  = dif.TotalDays;
+            DateTime currentDay = start;
+            uint count = 0;
 
-            for(int i = 0; i < holidays.Length; i++){
-                if (holidays[i].CompareTo(start) >= 0 && holidays[i].CompareTo(end) <= 0){
-                    count--;
+            while(currentDay.CompareTo(end) <= 0){
+                if (currentDay.DayOfWeek != DayOfWeek.Saturday && currentDay.DayOfWeek != DayOfWeek.Sunday){
+                    count++;
+                    for(int i = 0; i < holidays.Length; i++){
+                        if (holidays[i].CompareTo(currentDay) == 0){
+                            count--;
+                        }
+                    }
                 }
+                currentDay = currentDay.AddDays(1);
             }
+            
             Console.Write(count);
         }
     }
